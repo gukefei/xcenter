@@ -40,11 +40,15 @@ class Common_model extends CI_Model {
 		if (!is_array($config)) {
 			return false;
 		}
+		$configs=$this->config();
+		foreach ($config as $key => $value) {
+			$configs[$key]=$config[$key];
+		}
 		$meta='
 		<meta charset="'.$this->config->item('charset').'">
-		<title>'.$config['title'].'</title>
-		<meta name="keywords" content="'.$config['keyword'].'" />
-		<meta name="description" content="'.$config['description'].'" />
+		<title>'.$configs['title'].'</title>
+		<meta name="keywords" content="'.$configs['keyword'].'" />
+		<meta name="description" content="'.$configs['description'].'" />
 		<meta name="X-UA-Compatible" content="IE=EmulateIE7" />
 		';
 		return $meta;
@@ -59,7 +63,7 @@ class Common_model extends CI_Model {
 	 */
 	public function css($cssfile=''){
 		$csstr='';
-		$default=array('base.css');//默认加载的样式文件
+		$default=array();//默认加载的样式文件
 		if (is_array($cssfile)) {
 			$default=array_merge($default,$cssfile);
 		}
