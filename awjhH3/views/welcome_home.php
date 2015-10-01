@@ -1,3 +1,4 @@
+<?php $this->load->view('head'); ?>
 </head>
 <body>
 <table class="xTable">
@@ -49,3 +50,4 @@
   </tr>
   <tr>
 </table>
+<?php $this->load->view('foot'); ?>

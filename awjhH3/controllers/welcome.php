@@ -3,14 +3,12 @@
 class Welcome extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		$this->load->database();
 		$this->load->model('common_model','common');
 		$this->load->model('system_model','system');
 		$this->lang->load('system');
 	}
 	public function index(){
-		$this->load->helper('form');
-		$data=$this->common->setConfig($this->common->configs,'',$this->common->js);
+		$data=$this->common->setConfig($this->common->configs,array('base.css'),$this->common->js);
 		$data['form']=form_open('welcome/chk');
 		$data['lang']=$this->lang->language;
 		$this->load->view('head',$data);
@@ -57,61 +55,6 @@ class Welcome extends CI_Controller {
 		);
 		$this->session->set_userdata($session);
 		$this->system->log($row->id);
-		message($this->lang->line('user_login_success'),'welcome/system',1);
-	}
-	public function system(){
-		$this->system->isLogin();
-		$this->load->library('session');
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),$this->common->js);
-		$data['title']=$this->common->configs['title'];
-		$data['username']=$this->session->userdata('username');
-		$data['date']=date('Y-m-d',time());
-		if ($this->session->userdata('classic')=='1') {
-			$data['menu']=$this->system->menuList(false);
-		}
-		else {
-			$role=$this->system->getRole($this->session->userdata('role'));
-			$data['menu']=unserialize($role->menu);
-		}
-		$data['logouturl']='welcome/logout';
-		$data['lang']=$this->lang->language;
-		$this->load->view('head',$data);
-		$this->load->view('default');
-		$this->load->view('foot');
-	}
-	public function logout(){
-		$this->system->isLogin();
-		$this->load->library('session');
-		$this->load->helper('message');
-		$this->lang->load('user');
-		$this->session->unset_userdata('login_flag');
-		$this->session->sess_destroy();
-		message($this->lang->line('user_logout'),'',1);
-	}
-	public function home(){
-		$this->system->isLogin();
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),$this->common->js);
-		$data['username']=$this->session->userdata('username');
-		$data['ip']='';
-		$data['created']='';
-		$this->db->where('uid',$this->session->userdata('uid'));
-		$this->db->order_by('created','desc');
-		$this->db->limit(1,2);
-		$query=$this->db->get('log');
-		if ($query->num_rows()!=0) {
-			$row=$query->row();
-			$data['ip']=$row->ip;
-			$data['created']=date('Y-m-d H:i:s',$row->created);
-		}
-		$upload=get_cfg_var('upload_max_filesize');
-		$data['upload']=$upload?$upload:'';
-		$post=get_cfg_var('post_max_size');
-		$data['post']=$post?$post:'';
-		$timeout=get_cfg_var('max_execution_time');
-		$data['timeout']=$timeout?$timeout:'';
-		$data['lang']=$this->lang->language;
-		$this->load->view('head',$data);
-		$this->load->view('welcome_home');
-		$this->load->view('foot');
+		message($this->lang->line('user_login_success'),'system',1);
 	}
 }

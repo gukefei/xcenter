@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class System extends CI_Controller {
+class System extends MY_Controller {
 	private $rights=array(
 		'administrator'=>4,
 		'save'=>4,
@@ -46,11 +46,7 @@ class System extends CI_Controller {
 	);
 	public function __construct(){
 		parent::__construct();
-		$this->load->database();
 		$this->lang->load('system');//加载语言包
-		$this->load->model('common_model','common');
-		$this->load->model('system_model','system');
-		$this->system->isLogin();
 		$method=$this->uri->rsegment(2);//获取控制器中的方法
 		if (array_key_exists($method,$this->rights)) {//进行权限控制
 			$this->system->verify($this->rights[$method]);
@@ -908,5 +904,51 @@ class System extends CI_Controller {
 				echo '<img src="'.base_url('images/no_gray.gif').'" onclick=setType(this,"'.$url.'") title="可编辑" />';
 			}
 		}
+	}
+	public function index(){
+		$this->data['username']=$this->session->userdata('username');
+		$this->data['date']=date('Y-m-d',time());
+		if ($this->session->userdata('classic')=='1') {
+			$this->data['menu']=$this->system->menuList(false);
+		}
+		else {
+			$role=$this->system->getRole($this->session->userdata('role'));
+			$this->data['menu']=unserialize($role->menu);
+		}
+		$this->data['logouturl']='system/logout';
+		$this->data['lang']=$this->lang->language;
+		// print_r($this->data);
+		$this->load->view('default',$this->data);
+	}
+	public function logout(){
+		$this->system->isLogin();
+		$this->load->library('session');
+		$this->load->helper('message');
+		$this->lang->load('user');
+		$this->session->unset_userdata('login_flag');
+		$this->session->sess_destroy();
+		message($this->lang->line('user_logout'),'',1);
+	}
+	public function home(){
+		$this->data['username']=$this->session->userdata('username');
+		$this->data['ip']='';
+		$this->data['created']='';
+		$this->db->where('uid',$this->session->userdata('uid'));
+		$this->db->order_by('created','desc');
+		$this->db->limit(1,2);
+		$query=$this->db->get('log');
+		if ($query->num_rows()!=0) {
+			$row=$query->row();
+			$this->data['ip']=$row->ip;
+			$this->data['created']=date('Y-m-d H:i:s',$row->created);
+		}
+		$upload=get_cfg_var('upload_max_filesize');
+		$this->data['upload']=$upload?$upload:'';
+		$post=get_cfg_var('post_max_size');
+		$this->data['post']=$post?$post:'';
+		$timeout=get_cfg_var('max_execution_time');
+		$this->data['timeout']=$timeout?$timeout:'';
+		$this->data['lang']=$this->lang->language;
+		$this->load->view('welcome_home',$this->data);
 	}
 }

@@ -1,3 +1,4 @@
+<?php $this->load->view('head'); ?>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.area-l').height($(window).height()-85);
@@ -40,9 +41,9 @@ $(document).ready(function() {
       <div class="welcome">Hi,&nbsp;&nbsp;<?php echo $username; ?>&nbsp;<?php echo anchor(site_url($logouturl),$lang['sys_loginout']); ?>&nbsp;&nbsp;<?php echo anchor(base_url('../'),$lang['sys_homepage'],array('target'=>'_blank'));?></div>
       <div class="nav">
         <ul>
-          <li class="focus"><a href="<?php echo site_url('welcome/home'); ?>" target="content"><?php echo $lang['sys_home']; ?></a>
+          <li class="focus"><a href="<?php echo site_url('system/home'); ?>" target="content"><?php echo $lang['sys_home']; ?></a>
             <ul>
-              <li class="focus"><a href="<?php echo site_url('welcome/home'); ?>"><?php echo $lang['sys_admin_homepage']; ?></a></li>
+              <li class="focus"><a href="<?php echo site_url('system/home'); ?>" target="content"><?php echo $lang['sys_admin_homepage']; ?></a></li>
             </ul>
           </li>
           <?php
@@ -70,13 +71,14 @@ $(document).ready(function() {
   </div>
   <div class="area-l">
     <ul id="J-sidemenu">
-      <li class="focus"><a href="<?php echo site_url('welcome/home'); ?>" target="content"><?php echo $lang['sys_admin_homepage']; ?></a></li>
+      <li class="focus"><a href="<?php echo site_url('system/home'); ?>" target="content"><?php echo $lang['sys_admin_homepage']; ?></a></li>
     </ul>
     <div class="copyright">Powered by <?php echo $this->config->item('version');?></div>
   </div>
   <div class="area-r">
     <div id="main">
-      <iframe name="content" id="content" frameborder="0" scrolling="auto" src="<?php echo site_url('welcome/home'); ?>" style="width:100%; height:100%;"></iframe>
+      <iframe name="content" id="content" frameborder="0" scrolling="auto" src="<?php echo site_url('system/home'); ?>" style="width:100%; height:100%;"></iframe>
     </div>
   </div>
 </div>
+<?php $this->load->view('foot'); ?>
