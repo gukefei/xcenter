@@ -318,6 +318,12 @@ span.edit {
 .xForm .date {
 	background: url(../images/datePicker.gif) no-repeat right center;
 }
+.xForm .ex500 {
+	width: 500px;
+}
+.xForm .ex300 {
+	width: 300px;
+}
 
 /* 日期 */
 .required-display {
