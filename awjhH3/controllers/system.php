@@ -53,11 +53,11 @@ class System extends MY_Controller {
 		}
 	}
 	public function administrator(){
-		$this->load->helper(array('form'));
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$data['form']=form_open('system/save',array('id'=>'form1','class'=>'xForm'));
-		$data['lang']=$this->lang->language;
-		$this->load->view('system/administrator',$data);
+		array_push($this->js, 'validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/save',array('id'=>'form1','class'=>'xForm'));
+		$this->data['lang']=$this->lang->language;
+		$this->load->view('system/administrator',$this->data);
 	}
 	public function save(){//超级管理员的信息修改
 		$old_user=$this->input->post('old_user');
@@ -93,12 +93,12 @@ class System extends MY_Controller {
 		phpinfo();
 	}
 	public function config(){
-		$this->load->helper(array('form'));
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$data['form']=form_open('system/configSave',array('id'=>'form1','class'=>'xForm'));
-		$data['configs']=$this->common->config();
-		$data['lang']=$this->lang->language;
-		$this->load->view('system/config',$data);
+		array_push($this->js, 'validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/configSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['configs']=$this->common->config();
+		$this->data['lang']=$this->lang->language;
+		$this->load->view('system/config',$this->data);
 	}
 	public function configSave(){
 		$title=$this->input->post('title');
@@ -116,11 +116,11 @@ class System extends MY_Controller {
 		message($this->lang->line('success'),'system/config');
 	}
 	public function emailConfig(){
-		$this->load->helper(array('form'));
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$data['form']=form_open('system/emailConfigSave',array('id'=>'form1','class'=>'xForm'));
-		$data['configs']=$this->common->config();
-		$this->load->view('system/email_config',$data);
+		array_push($this->js, 'validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/emailConfigSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['configs']=$this->common->config();
+		$this->load->view('system/email_config',$this->data);
 	}
 	public function emailConfigSave(){
 		$smtp_host=$this->input->post('host');
@@ -170,9 +170,9 @@ class System extends MY_Controller {
 	 *
 	 */
 	public function menuGroup(){
-		$this->load->helper(array('form'));
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$data['form']=form_open('system/menuGroupSave',array('id'=>'form1','class'=>'xForm'));
+		array_push($this->js, 'validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/menuGroupSave',array('id'=>'form1','class'=>'xForm'));
 		$db=clone $this->db;
 		$total=$this->db->count_all_results('menu');
 		$url=base_url('system/menuGroup/page/');
@@ -185,8 +185,8 @@ class System extends MY_Controller {
 		$this->db->order_by('paixun','asc');
 		$this->db->limit($config['per_page'],$this->uri->segment($config['uri_segment'],0));
 		$menu=$this->db->get();
-		$data['menu']=$menu->result_array();
-		$this->load->view('system/menugroup',$data);
+		$this->data['menu']=$menu->result_array();
+		$this->load->view('system/menugroup',$this->data);
 	}
 	public function menuGroupSave(){
 		$name=$this->input->post('name');
@@ -252,11 +252,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()<=0) {
 			message($this->lang->line('exists'),'system/menuGroup');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/menuGroupEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['m']=$query->row_array();
-		$this->load->view('system/menugroup_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/menuGroupEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['m']=$query->row_array();
+		$this->load->view('system/menugroup_edit',$this->data);
 	}
 	public function menuGroupEditSave(){
 		$name=$this->input->post('name');
@@ -320,9 +320,9 @@ class System extends MY_Controller {
 	public function menu(){
 		$id=$this->uri->segment(3);
 		$id=$id!==false?$id:message($this->lang>line('error'),'system/menuGroup');
-		$this->load->helper(array('form'));
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$data['form']=form_open('system/menuSave',array('id'=>'form1','class'=>'xForm'));
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/menuSave',array('id'=>'form1','class'=>'xForm'));
 		$this->db->where('menu_id',$id);
 		$db=clone $this->db;
 		$query=$this->db->get('menu_rights');
@@ -336,9 +336,9 @@ class System extends MY_Controller {
 		$this->db->order_by('paixun','asc');
 		$this->db->limit($config['per_page'],$this->uri->segment($config['uri_segment'],0));
 		$menu=$this->db->get();
-		$data['menu']=$menu->result_array();
-		$data['id']=$id;
-		$this->load->view('system/menu',$data);
+		$this->data['menu']=$menu->result_array();
+		$this->data['id']=$id;
+		$this->load->view('system/menu',$this->data);
 	}
 	public function menuSave(){
 		$id=$this->input->post('id');
@@ -367,11 +367,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()<=0) {
 			message($this->lang->line('exists'),'system/menuGroup');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/menuEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['m']=$query->row_array();
-		$this->load->view('system/menu_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/menuEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['m']=$query->row_array();
+		$this->load->view('system/menu_edit',$this->data);
 	}
 	public function menuEditSave(){
 		$bid=$this->input->post('bid');
@@ -397,11 +397,11 @@ class System extends MY_Controller {
 		message($this->lang->line('success'),'system/menu/'.$bid);
 	}
 	public function pswEdit(){
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/pswEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['lang']=$this->lang->language;
-		$this->load->view('system/password_edit.php',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/pswEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['lang']=$this->lang->language;
+		$this->load->view('system/password_edit.php',$this->data);
 	}
 	public function pswEditSave(){
 		$oldpsw=$this->input->post('old_psw');
@@ -442,9 +442,9 @@ class System extends MY_Controller {
 		$etime=$etime?$etime:$uridata['etime'];
 		$stimeamp=$stime?$this->common->makeTime('-',$stime,1):false;
 		$etimeamp=$etime?$this->common->makeTime('-',$etime,2):false;
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'global.js','My97DatePicker/WdatePicker.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/log',array('id'=>'form1','class'=>'xForm'));
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js','My97DatePicker/WdatePicker.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/log',array('id'=>'form1','class'=>'xForm'));
 		$url=index_page().'/system/log';
 		$this->db->select('b.username,a.*');
 		$this->db->from('log as a');
@@ -472,18 +472,18 @@ class System extends MY_Controller {
 		$this->pagination->initialize($config);
 		$db->limit($config['per_page'],$this->uri->segment($config['uri_segment'],0));
 		$result=$db->get();
-		$data['log']=$result->result_array();
-		$data['name']=$name?$name:'';
-		$data['stime']=$stime?$stime:'';
-		$data['etime']=$etime?$etime:'';
-		$this->load->view('system/log',$data);
+		$this->data['log']=$result->result_array();
+		$this->data['name']=$name?$name:'';
+		$this->data['stime']=$stime?$stime:'';
+		$this->data['etime']=$etime?$etime:'';
+		$this->load->view('system/log',$this->data);
 	}
 	public function module(){
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/moduleSave',array('id'=>'form1','class'=>'xForm'));
-		$data['module']=$this->system->module();
-		$this->load->view('system/module',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/moduleSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['module']=$this->system->module();
+		$this->load->view('system/module',$this->data);
 	}
 	public function moduleSave(){
 		$name=$this->input->post('name');
@@ -503,11 +503,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()<=0) {
 			message($this->lang->line('exists'),'system/module');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/moduleEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['m']=$query->row();
-		$this->load->view('system/module_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/moduleEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['m']=$query->row();
+		$this->load->view('system/module_edit',$this->data);
 	}
 	public function moduleEditSave(){
 		$name=$this->input->post('name');
@@ -536,17 +536,17 @@ class System extends MY_Controller {
 		$id=$this->uri->segment(3);
 		$id=$id!==false?$id:message($this->lang->line('error'),'system/module');
 		$rights=$this->system->moduleRights($id);
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/modRightsSave',array('id'=>'form1','class'=>'xForm'));
-		$data['rights']=$rights;
-		$data['id']=$id;
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/modRightsSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['rights']=$rights;
+		$this->data['id']=$id;
 		$this->db->select_max('rights','rights');
 		$query=$this->db->get('mod_rights');
 		$query=$query->row();
 		$right=$query->rights+1;
-		$data['right']=$right;
-		$this->load->view('system/module_rights',$data);
+		$this->data['right']=$right;
+		$this->load->view('system/module_rights',$this->data);
 	}
 	public function modRightsSave(){
 		$id=$this->input->post('id');
@@ -570,11 +570,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()==0) {
 			message($this->lang->line('exists'),'system/modRights/'.$id);
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/modRightsEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['rights']=$query->row();
-		$this->load->view('system/module_rights_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/modRightsEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['rights']=$query->row();
+		$this->load->view('system/module_rights_edit',$this->data);
 	}
 	public function modRightsEditSave(){
 		$mod=$this->input->post('modid');
@@ -609,9 +609,9 @@ class System extends MY_Controller {
 		}
 	}
 	public function role(){
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/roleSave',array('id'=>'form1','class'=>'xForm'));
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/roleSave',array('id'=>'form1','class'=>'xForm'));
 		$total=$this->db->count_all('role');
 		$url=base_url(index_page().'/system/role');
 		$config=$this->common->pageConfig($url,$total,15,3);
@@ -619,8 +619,8 @@ class System extends MY_Controller {
 		$this->pagination->initialize($config);
 		$this->db->limit($config['per_page'],$this->uri->segment($config['uri_segment'],0));
 		$query=$this->db->get('role');
-		$data['role']=$query->result_array();
-		$this->load->view('system/role',$data);
+		$this->data['role']=$query->result_array();
+		$this->load->view('system/role',$this->data);
 	}
 	public function roleSave(){
 		$name=$this->input->post('name');
@@ -664,11 +664,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()==0) {
 			message($this->lang->Line('exists'),'system/role');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/roleEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['role']=$query->row();
-		$this->load->view('system/role_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/roleEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['role']=$query->row();
+		$this->load->view('system/role_edit',$this->data);
 	}
 	public function roleEditSave(){
 		$name=$this->input->post('name');
@@ -692,13 +692,11 @@ class System extends MY_Controller {
 		$id=$this->uri->segment(3);
 		$id=$id!==false?$id:message($this->lang->Line('error'),'system/role');
 		$mod=$this->system->moduleRightsList();
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js));
-		$this->load->helper('form');
-		$data['form']=form_open('system/assignRightSave',array('id'=>'form1','class'=>'xForm'));
-		$data['mod']=$mod;
-		$data['rights']=$this->system->roleRights($id);
-		$data['role']=$id;
-		$this->load->view('system/right_assign',$data);
+		$this->data['form']=form_open('system/assignRightSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['mod']=$mod;
+		$this->data['rights']=$this->system->roleRights($id);
+		$this->data['role']=$id;
+		$this->load->view('system/right_assign',$this->data);
 	}
 	public function assignRightSave(){
 		$id=$this->input->post('id');
@@ -721,10 +719,8 @@ class System extends MY_Controller {
 		$id=$this->uri->segment(3);
 		$id=$id!==false?$id:message($this->lang->Line('error'),'system/role');
 		$menu=$this->system->menuList();
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js));
-		$this->load->helper('form');
-		$data['form']=form_open('system/assignMenuSave',array('id'=>'form1','class'=>'xForm'));
-		$data['menus']=$menu;
+		$this->data['form']=form_open('system/assignMenuSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['menus']=$menu;
 		$usermenus=$usermenu=array();
 		$usermenus=unserialize($this->system->roleMenus($id));
 		if ($usermenus) {
@@ -734,9 +730,9 @@ class System extends MY_Controller {
 				}
 			}
 		}
-		$data['menu']=$usermenu;
-		$data['role']=$id;
-		$this->load->view('system/menu_assign',$data);
+		$this->data['menu']=$usermenu;
+		$this->data['role']=$id;
+		$this->load->view('system/menu_assign',$this->data);
 	}
 	public function assignMenuSave(){
 		$id=$this->input->post('id');
@@ -776,9 +772,9 @@ class System extends MY_Controller {
 	 *
 	 */
 	public function master(){
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js','global.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/masterSave',array('id'=>'form1','class'=>'xForm'));
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/masterSave',array('id'=>'form1','class'=>'xForm'));
 		$this->db->order_by('classic','desc');
 		$db=clone $this->db;
 		$total=$this->db->count_all('admin');
@@ -797,8 +793,8 @@ class System extends MY_Controller {
 				$result[$k]['role']=$v['role_id']?$this->system->getRoleNameById($v['role_id']):'--';
 			}
 		}
-		$data['m']=$result;
-		$this->load->view('system/master',$data);
+		$this->data['m']=$result;
+		$this->load->view('system/master',$this->data);
 	}
 	public function masterSave(){
 		$name=$this->input->post('name');
@@ -827,11 +823,11 @@ class System extends MY_Controller {
 		if ($query->num_rows()==0) {
 			message($this->lang->line('exists'),'system/master');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/masterEditSave',array('id'=>'form1','class'=>'xForm'));
-		$data['id']=$id;
-		$this->load->view('system/master_edit',$data);
+		array_push($this->js, 'global.js','validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/masterEditSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['id']=$id;
+		$this->load->view('system/master_edit',$this->data);
 	}
 	public function masterEditSave(){
 		$id=$this->input->post('id');
@@ -866,12 +862,12 @@ class System extends MY_Controller {
 		if ($query->num_rows()==0) {
 			message($this->lang->line('exists'),'system/master');
 		}
-		$data=$this->common->setConfig($this->common->configs,array('global.css'),array($this->common->js,'validateMyForm/jquery.validateMyForm.1.0.js'));
-		$this->load->helper('form');
-		$data['form']=form_open('system/masterRoleSave',array('id'=>'form1','class'=>'xForm'));
-		$data['id']=$id;
-		$data['role']=$this->system->role();
-		$this->load->view('system/master_role',$data);
+		array_push($this->js, 'validateMyForm/jquery.validateMyForm.1.0.js');
+		$this->data['js']=$this->common->script($this->js);
+		$this->data['form']=form_open('system/masterRoleSave',array('id'=>'form1','class'=>'xForm'));
+		$this->data['id']=$id;
+		$this->data['role']=$this->system->role();
+		$this->load->view('system/master_role',$this->data);
 	}
 	public function masterRoleSave(){
 		$id=$this->input->post('id');
@@ -917,7 +913,6 @@ class System extends MY_Controller {
 		}
 		$this->data['logouturl']='system/logout';
 		$this->data['lang']=$this->lang->language;
-		// print_r($this->data);
 		$this->load->view('default',$this->data);
 	}
 	public function logout(){
